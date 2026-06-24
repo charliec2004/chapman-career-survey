@@ -10,6 +10,36 @@ import QuestionCard from '@/components/QuestionCard'
 import ResultsView from '@/components/ResultsView'
 import ContactForm from '@/components/ContactForm'
 
+function SurveyNav({
+  className = '', onBack, onNext, nextDisabled, nextLabel,
+}: {
+  className?: string
+  onBack: () => void
+  onNext: () => void
+  nextDisabled: boolean
+  nextLabel: string
+}) {
+  return (
+    <div className={`flex items-center justify-between ${className}`}>
+      <button
+        type="button"
+        onClick={onBack}
+        className="min-h-11 rounded font-heading font-bold text-pillar hover:text-panther-black focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
+      >
+        ← Back
+      </button>
+      <button
+        type="button"
+        onClick={onNext}
+        disabled={nextDisabled}
+        className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
+      >
+        {nextLabel}
+      </button>
+    </div>
+  )
+}
+
 export default function Home() {
   const [state, dispatch] = useReducer(surveyReducer, initialState)
   const question = currentQuestion(state)
@@ -31,29 +61,26 @@ export default function Home() {
         {state.phase === 'survey' && question && (
           <div>
             <ProgressBar current={current} total={total} />
+            <SurveyNav
+              className="mb-6"
+              onBack={() => dispatch({ type: 'back' })}
+              onNext={() => dispatch({ type: 'next' })}
+              nextDisabled={!canAdvance(state)}
+              nextLabel={current >= total ? 'See results' : 'Next'}
+            />
             <QuestionCard
               question={question}
               options={optionsFor(question, state.answers)}
               value={state.answers[question.id]}
               onChange={(value) => dispatch({ type: 'answer', id: question.id, value })}
             />
-            <div className="mt-8 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'back' })}
-                className="min-h-11 font-heading font-bold text-pillar hover:text-panther-black focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2 rounded"
-              >
-                ← Back
-              </button>
-              <button
-                type="button"
-                onClick={() => dispatch({ type: 'next' })}
-                disabled={!canAdvance(state)}
-                className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
-              >
-                {current >= total ? 'See results' : 'Next'}
-              </button>
-            </div>
+            <SurveyNav
+              className="mt-8"
+              onBack={() => dispatch({ type: 'back' })}
+              onNext={() => dispatch({ type: 'next' })}
+              nextDisabled={!canAdvance(state)}
+              nextLabel={current >= total ? 'See results' : 'Next'}
+            />
           </div>
         )}
 
