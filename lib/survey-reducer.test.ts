@@ -66,6 +66,15 @@ describe('survey reducer', () => {
     expect(currentQuestion(s)?.id).toBe('year')
   })
 
+  it('back on the first question is a no-op', () => {
+    const s = start()
+    expect(surveyReducer(s, { type: 'back' })).toEqual(s)
+  })
+
+  it('progress is zeroed outside the survey phase', () => {
+    expect(progress(initialState)).toEqual({ current: 0, total: 0 })
+  })
+
   it('changing an earlier branch answer drops now-invisible later answers on results', () => {
     // Build a full materials path, then change goal to network and confirm materials answers are gone.
     let s = start()

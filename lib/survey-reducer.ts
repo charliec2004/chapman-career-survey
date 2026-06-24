@@ -32,7 +32,8 @@ function pruneAnswers(answers: Answers): Answers {
 
 function isAnswered(value: AnswerValue | undefined): boolean {
   if (value == null) return false
-  return Array.isArray(value) ? value.length > 0 : value.length > 0
+  // Both string and string[] expose .length; empty means unanswered.
+  return value.length > 0
 }
 
 export function currentQuestion(state: SurveyState): Question | null {
@@ -48,6 +49,7 @@ export function canAdvance(state: SurveyState): boolean {
 }
 
 export function progress(state: SurveyState): { current: number; total: number } {
+  if (state.phase !== 'survey') return { current: 0, total: 0 }
   const total = visibleQuestions(state.answers).length
   return { current: Math.min(state.index + 1, total), total }
 }
@@ -73,7 +75,8 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
     }
 
     case 'back': {
-      if (state.index === 0) return { ...state, phase: 'survey' }
+      // No previous question before the first one — no-op (UI can disable Back on Q1).
+      if (state.index === 0) return state
       return { ...state, index: state.index - 1 }
     }
 
