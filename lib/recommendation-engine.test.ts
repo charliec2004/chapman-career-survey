@@ -45,6 +45,14 @@ describe('recommendation engine', () => {
     expect(new Set(vmock.reasons).size).toBe(vmock.reasons.length)
   })
 
+  it('produces a sensible non-empty result for the grad-school path', () => {
+    const answers: Answers = { year: 'senior', college: 'crean', goal: 'gradschool', gradschool_stage: 'applying' }
+    const results = recommend(answers)
+    // Office (college-specific) always present in primary; at least one tool recommended.
+    expect(results.primary.some((r) => r.resource.id === 'office-crean')).toBe(true)
+    expect(results.primary.some((r) => r.resource.kind === 'tool')).toBe(true)
+  })
+
   it('flags the senior Career Passport nudge only for seniors', () => {
     const base: Answers = { college: 'argyros', goal: 'jobsearch', jobsearch_need: 'listings', jobsearch_region: 'local' }
     expect(recommend({ ...base, year: 'senior' }).seniorPassportNudge).toBe(true)

@@ -79,7 +79,8 @@ export function recommend(answers: Answers): Results {
     if (byScore !== 0) return byScore
     const byPriority = RESOURCES[a].priority - RESOURCES[b].priority
     if (byPriority !== 0) return byPriority
-    return a.localeCompare(b)
+    // Final tie-break on id: explicit ASCII comparison (locale-independent, fully deterministic).
+    return a < b ? -1 : a > b ? 1 : 0
   })
 
   const office = toRec(officeId)
