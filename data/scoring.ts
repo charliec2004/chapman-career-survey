@@ -63,7 +63,7 @@ export const SCORING: Partial<Record<QuestionId, Record<string, Contribution[]>>
 
   jobsearch_need: {
     listings: [{ resourceId: 'handshake', weight: 3, reason: 'You need to find job and internship listings' }],
-    research: [{ resourceId: 'vault', weight: 3, reason: 'You want to research employers and industries' }],
+    research: [{ resourceId: 'vault', weight: 5, reason: 'You want to research employers and industries' }],
     contacts: [
       { resourceId: 'careershift', weight: 3, reason: 'You want to find contacts and the hidden job market' },
       { resourceId: 'panther-network', weight: 1, reason: 'Alumni are a great source of contacts' },
