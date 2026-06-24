@@ -8,7 +8,7 @@ import logo from '@/public/chapman-logo.png'
 export default function BrandHeader() {
   return (
     <header className="border-b-4 border-chapman-red bg-white">
-      <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4">
+      <div className="flex items-center gap-3 px-4 py-4 sm:px-6">
         <Image src={logo} alt="Chapman University" priority className="h-7 w-auto sm:h-9" />
         <span aria-hidden className="h-8 w-px bg-pillar/30" />
         <p className="font-heading text-xs font-bold uppercase leading-tight tracking-widest text-pillar">

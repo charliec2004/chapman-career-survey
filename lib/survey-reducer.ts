@@ -95,8 +95,8 @@ export function surveyReducer(state: SurveyState, action: SurveyAction): SurveyS
     }
 
     case 'back': {
-      // No previous question before the first one — no-op (UI can disable Back on Q1).
-      if (state.index === 0) return state
+      // From the first question, Back returns to the intro / "Start the survey" screen.
+      if (state.index === 0) return { ...state, phase: 'intro' }
       return { ...state, index: state.index - 1 }
     }
 

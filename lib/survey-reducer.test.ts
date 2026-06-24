@@ -66,9 +66,9 @@ describe('survey reducer', () => {
     expect(currentQuestion(s)?.id).toBe('year')
   })
 
-  it('back on the first question is a no-op', () => {
+  it('back on the first question returns to the intro screen', () => {
     const s = start()
-    expect(surveyReducer(s, { type: 'back' })).toEqual(s)
+    expect(surveyReducer(s, { type: 'back' }).phase).toBe('intro')
   })
 
   it('progress is zeroed outside the survey phase', () => {
