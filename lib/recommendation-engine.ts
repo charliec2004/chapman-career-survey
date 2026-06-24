@@ -22,18 +22,24 @@ interface Accum { score: number; reasons: string[] }
 
 const MAX_ALSO_EXPLORE = 4
 
-/** Resolve which office to recommend from the college answer (deny-by-default → central). */
+/**
+ * Resolve the student's *matching* office: alumni → Alumni Services; otherwise the
+ * college-specific office (deny-by-default → central for undeclared/unknown).
+ */
 function resolveOfficeId(answers: Answers): ResourceId {
+  if (answers.year === 'alumni') return 'office-alumni'
   const college = answers.college as CollegeId | undefined
   if (college && college in COLLEGE_TO_OFFICE) return COLLEGE_TO_OFFICE[college]
   return 'office-central'
 }
 
-/** Base reason shown for the recommended office. */
+/** Base reason shown for an office recommendation. */
 function officeBaseReason(officeId: ResourceId): string {
-  return officeId === 'office-central'
-    ? 'The central Career & Professional Development office serves all students — a great place to start.'
-    : `${getResource(officeId).name} is the dedicated career office for your college — book a one-on-one for personalized guidance.`
+  if (officeId === 'office-central')
+    return 'The central Career & Professional Development office serves all students and alumni — a great place to start.'
+  if (officeId === 'office-alumni')
+    return "Chapman's Career Team supports alumni at every stage of your career."
+  return `${getResource(officeId).name} is the dedicated career office for your college — book a one-on-one for personalized guidance.`
 }
 
 function addReason(acc: Map<ResourceId, Accum>, id: ResourceId, weight: number, reason: string) {
@@ -86,9 +92,16 @@ export function recommend(answers: Answers): Results {
   const office = toRec(officeId)
   const tools = toolIds.map(toRec)
 
-  // Primary: top tool (if any) + the office. Also-explore: remaining tools (≤4).
+  // Primary: top tool (if any) + the matching office. Also-explore: remaining tools (≤4).
   const primary: Recommendation[] = tools.length > 0 ? [tools[0], office] : [office]
   const alsoExplore = tools.slice(1, 1 + MAX_ALSO_EXPLORE)
+
+  // The general Career Center is ALWAYS an option, pinned last — unless it's already
+  // the student's matching office (undeclared students), to avoid duplication.
+  if (officeId !== 'office-central') {
+    addReason(acc, 'office-central', 0, officeBaseReason('office-central'))
+    alsoExplore.push(toRec('office-central'))
+  }
 
   // Career Passport is a seniors program → nudge fourth-year students.
   return { primary, alsoExplore, seniorPassportNudge: answers.year === 'fourth' }

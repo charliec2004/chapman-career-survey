@@ -5,7 +5,7 @@ export type ResourceId =
   | 'panther-network' | 'assessments'
   | 'office-central' | 'office-argyros' | 'office-dodge' | 'office-engineering'
   | 'office-schmid' | 'office-crean' | 'office-wilkinson' | 'office-attallah'
-  | 'office-copa' | 'office-communication' | 'office-law' | 'office-pharmacy'
+  | 'office-copa' | 'office-communication' | 'office-law' | 'office-pharmacy' | 'office-alumni'
 
 export type CollegeId =
   | 'argyros' | 'dodge' | 'engineering' | 'schmid' | 'crean'
@@ -80,6 +80,11 @@ export const RESOURCES: Record<ResourceId, Resource> = {
     id: 'office-central', kind: 'office', name: 'Career & Professional Development (Career House)', priority: 0,
     whatItIs: 'The central career office serving all Chapman students and alumni.',
     action: { href: HANDSHAKE_APPT, label: 'Book an appointment', email: 'career@chapman.edu', phone: '(714) 997-6942', location: 'Career House, 342 N. Glassell St., Orange, CA 92866', hours: 'Mon–Fri 8 a.m.–5 p.m.', scheduling: 'Handshake' },
+  },
+  'office-alumni': {
+    id: 'office-alumni', kind: 'office', name: 'Career & Professional Development — Alumni Services', priority: 0,
+    whatItIs: 'Career support for Chapman alumni — the same Career Team serves you no matter your graduation year.',
+    action: { href: 'https://www.chapman.edu/campus-services/career-professional-development/info-for/alumni.aspx', label: 'Alumni career resources', email: 'career@chapman.edu', phone: '(714) 997-6942', location: 'Career House, 342 N. Glassell St., Orange, CA 92866', hours: 'Mon–Fri 8 a.m.–5 p.m.', scheduling: 'Handshake' },
   },
   'office-argyros': {
     id: 'office-argyros', kind: 'office', name: 'Argyros College — Career Advancement', priority: 0,

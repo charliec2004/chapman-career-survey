@@ -15,12 +15,27 @@ describe('recommendation engine', () => {
     expect(all.some((r) => r.resource.id === 'office-central')).toBe(true)
   })
 
-  it('always includes exactly one office, and it appears in the primary tier', () => {
+  it('puts the matching college office in primary and pins the general Career Center last', () => {
     const answers: Answers = { year: 'fourth', college: 'argyros', goal: 'materials', materials_which: ['resume'], materials_mode: 'ai' }
     const results = recommend(answers)
-    const offices = [...results.primary, ...results.alsoExplore].filter((r) => r.resource.kind === 'office')
+    expect(results.primary.some((r) => r.resource.id === 'office-argyros')).toBe(true)
+    const last = results.alsoExplore[results.alsoExplore.length - 1]
+    expect(last.resource.id).toBe('office-central')
+  })
+
+  it('does not duplicate the office for undeclared students (matches central)', () => {
+    const answers: Answers = { year: 'second', college: 'undeclared', goal: 'explore', explore_assessment: 'no', explore_mode: 'self' }
+    const offices = [...recommend(answers).primary, ...recommend(answers).alsoExplore].filter((r) => r.resource.kind === 'office')
     expect(offices).toHaveLength(1)
-    expect(results.primary.some((r) => r.resource.kind === 'office')).toBe(true)
+    expect(offices[0].resource.id).toBe('office-central')
+  })
+
+  it('routes alumni to Alumni Services with the general Career Center pinned last', () => {
+    const answers: Answers = { year: 'alumni', college: 'engineering', goal: 'network', network_focus: 'alumni' }
+    const results = recommend(answers)
+    expect(results.primary.some((r) => r.resource.id === 'office-alumni')).toBe(true)
+    const last = results.alsoExplore[results.alsoExplore.length - 1]
+    expect(last.resource.id).toBe('office-central')
   })
 
   it('puts the top-scoring tool first in the primary tier', () => {

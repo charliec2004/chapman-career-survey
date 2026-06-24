@@ -9,8 +9,23 @@ export default function ResultsView({ results, onRestart }: { results: Results; 
 
       {results.seniorPassportNudge && (
         <div className="mt-4 rounded-lg border-l-4 border-grove bg-grove/5 p-4 text-sm">
-          <strong className="font-heading">Graduating soon?</strong> Ask the Career Center about the{' '}
-          <span className="font-semibold">Career Passport Program</span> for seniors.
+          <strong className="font-heading">Graduating soon?</strong> Ask the{' '}
+          <a
+            href="https://www.chapman.edu/campus-services/career-professional-development/index.aspx"
+            target="_blank" rel="noopener noreferrer"
+            className="font-semibold text-chapman-red underline"
+          >
+            Career Center
+          </a>{' '}
+          about the{' '}
+          <a
+            href="https://chapman.joinhandshake.com/edu/articles/33391"
+            target="_blank" rel="noopener noreferrer"
+            className="font-semibold text-chapman-red underline"
+          >
+            Career Passport Program
+          </a>{' '}
+          for seniors.
         </div>
       )}
 

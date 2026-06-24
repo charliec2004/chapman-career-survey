@@ -1,8 +1,9 @@
 import { ImageResponse } from 'next/og'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 // Social-share (Open Graph / Twitter) card, generated at build time so it works
-// with the static export. Chapman-INSPIRED styling (palette + triangle accent) —
-// no official logo/seal reproduced.
+// with the static export. Uses the official Chapman window mark + palette.
 // Required so the image is rendered once at build time under `output: 'export'`.
 export const dynamic = 'force-static'
 export const alt = 'Chapman Career Services Finder — find your next career step'
@@ -13,6 +14,12 @@ export const contentType = 'image/png'
 const CHAPMAN_RED = '#A50034'
 const PANTHER_BLACK = '#231F20'
 const PILLAR = '#6E6259'
+
+// Official Chapman window mark (cropped from the master-brand logo), inlined as a
+// data URI so the OG renderer can embed it at build time.
+const windowSrc = `data:image/png;base64,${readFileSync(
+  join(process.cwd(), 'public', 'chapman-window.png'),
+).toString('base64')}`
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -29,12 +36,10 @@ export default function OpengraphImage() {
           fontFamily: 'sans-serif',
         }}
       >
-        {/* Wordmark row: triangle accent + text (no official logo). */}
-        {/* Inline SVG triangle — the CSS border-triangle trick is not supported by the OG renderer. */}
+        {/* Wordmark row: official Chapman window mark + text. */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <svg width="44" height="38" viewBox="0 0 44 38" style={{ marginRight: 24 }}>
-            <polygon points="22,2 42,36 2,36" fill={CHAPMAN_RED} />
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={windowSrc} width={60} height={60} alt="" style={{ marginRight: 24 }} />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div
               style={{
