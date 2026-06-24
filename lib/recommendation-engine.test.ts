@@ -57,4 +57,10 @@ describe('recommendation engine', () => {
     const b: Answers = { jobsearch_region: 'local', goal: 'jobsearch', college: 'argyros', jobsearch_need: 'contacts', year: 'junior' }
     expect(recommend(a)).toEqual(recommend(b))
   })
+
+  it('is deterministic for multi-select (array) answers regardless of element order', () => {
+    const a: Answers = { year: 'junior', college: 'wilkinson', goal: 'materials', materials_which: ['resume', 'cover_letter', 'linkedin'], materials_mode: 'ai' }
+    const b: Answers = { year: 'junior', college: 'wilkinson', goal: 'materials', materials_which: ['linkedin', 'resume', 'cover_letter'], materials_mode: 'ai' }
+    expect(recommend(a)).toEqual(recommend(b))
+  })
 })

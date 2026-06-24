@@ -56,7 +56,8 @@ export function recommend(answers: Answers): Results {
     const answer = answers[q.id]
     const optionMap = SCORING[q.id]
     if (!optionMap || answer == null) continue
-    const values = Array.isArray(answer) ? answer : [answer]
+    // Sort multi-select values so reason ordering is independent of selection order.
+    const values = Array.isArray(answer) ? [...answer].sort() : [answer]
     for (const value of values) {
       const contributions = optionMap[value]
       if (!contributions) continue
