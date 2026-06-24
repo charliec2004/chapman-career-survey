@@ -7,3 +7,6 @@ out/
 
 # SDD scratch (ledger, briefs, reports)
 .superpowers/
+
+# TS build cache
+*.tsbuildinfo
