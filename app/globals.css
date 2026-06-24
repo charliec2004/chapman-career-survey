@@ -8,8 +8,11 @@
   --color-pillar: #6E6259;
   --color-sand: #DDCBA4;
 
-  --font-heading: var(--font-jost), "Century Gothic", Arial, sans-serif;
-  --font-body: var(--font-source-serif), Georgia, serif;
+  /* Official Chapman type: Futura PT (headings) + Minion Pro (body), both Adobe-licensed.
+     Add an Adobe Fonts (Typekit) <link> in app/layout.tsx to render them; until then these
+     fall back to Arial / Georgia (Chapman's sanctioned fallbacks). */
+  --font-heading: "Futura PT", "Century Gothic", Arial, sans-serif;
+  --font-body: "Minion Pro", Georgia, "Times New Roman", serif;
 }
 
 :root { color-scheme: light; }

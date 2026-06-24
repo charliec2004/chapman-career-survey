@@ -90,5 +90,6 @@ export function recommend(answers: Answers): Results {
   const primary: Recommendation[] = tools.length > 0 ? [tools[0], office] : [office]
   const alsoExplore = tools.slice(1, 1 + MAX_ALSO_EXPLORE)
 
-  return { primary, alsoExplore, seniorPassportNudge: answers.year === 'senior' }
+  // Career Passport is a seniors program → nudge fourth-year students.
+  return { primary, alsoExplore, seniorPassportNudge: answers.year === 'fourth' }
 }

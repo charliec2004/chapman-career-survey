@@ -1,9 +1,10 @@
 export type GoalValue =
   | 'explore' | 'materials' | 'interviews' | 'jobsearch'
-  | 'network' | 'gradschool' | 'international'
+  | 'network' | 'gradschool' | 'international' | 'career_change'
 
 export type QuestionId =
   | 'year' | 'college' | 'goal'
+  | 'industry_current' | 'industry_switch' | 'industry_target'
   | 'explore_assessment' | 'explore_mode'
   | 'materials_which' | 'materials_mode'
   | 'interview_type' | 'interview_mode'
@@ -22,8 +23,83 @@ export interface Question {
   prompt: string
   helpText?: string
   type: 'single' | 'multi'
-  options: Option[]
+  /** Static list, or a function of the current answers (used for persona-adaptive goals). */
+  options: Option[] | ((a: Answers) => Option[])
   isVisible: (answers: Answers) => boolean
+}
+
+/** Resolve a question's options against the current answers. */
+export function optionsFor(q: Question, a: Answers): Option[] {
+  return typeof q.options === 'function' ? q.options(a) : q.options
+}
+
+// ---- Personas (derived from class year) ------------------------------------
+
+type Persona = 'early' | 'upper' | 'grad' | 'alumni' | 'unknown'
+
+function persona(a: Answers): Persona {
+  switch (a.year) {
+    case 'first':
+    case 'second':
+      return 'early'
+    case 'third':
+    case 'fourth':
+      return 'upper'
+    case 'grad':
+      return 'grad'
+    case 'alumni':
+      return 'alumni'
+    default:
+      return 'unknown'
+  }
+}
+
+const GOAL_LABELS: Record<GoalValue, string> = {
+  explore: 'Explore my career or major direction',
+  materials: 'Build my application materials',
+  interviews: 'Prepare for interviews',
+  jobsearch: 'Search for jobs or internships',
+  network: 'Network and find mentors',
+  gradschool: 'Plan for grad school',
+  international: 'Work or intern internationally',
+  career_change: 'Change careers or industries',
+}
+
+// Which goals each persona sees, in display order.
+const PERSONA_GOALS: Record<Persona, GoalValue[]> = {
+  early: ['explore', 'materials', 'network', 'international'],
+  upper: ['explore', 'materials', 'interviews', 'jobsearch', 'network', 'gradschool', 'international'],
+  grad: ['materials', 'interviews', 'jobsearch', 'network', 'gradschool', 'career_change', 'international'],
+  alumni: ['career_change', 'network', 'jobsearch', 'materials', 'interviews', 'international'],
+  unknown: ['explore', 'materials', 'interviews', 'jobsearch', 'network', 'gradschool', 'international', 'career_change'],
+}
+
+function goalOptions(a: Answers): Option[] {
+  return PERSONA_GOALS[persona(a)].map((v) => ({ value: v, label: GOAL_LABELS[v] }))
+}
+
+// ---- Industries (for alumni / career-changers / explorers) -----------------
+
+export const INDUSTRIES: Option[] = [
+  { value: 'tech', label: 'Technology & Software' },
+  { value: 'finance', label: 'Finance & Banking' },
+  { value: 'healthcare', label: 'Healthcare' },
+  { value: 'entertainment', label: 'Film, TV & Entertainment' },
+  { value: 'marketing', label: 'Marketing, Advertising & PR' },
+  { value: 'education', label: 'Education' },
+  { value: 'government', label: 'Government & Public Policy' },
+  { value: 'nonprofit', label: 'Nonprofit & Social Impact' },
+  { value: 'law', label: 'Law & Legal' },
+  { value: 'engineering', label: 'Engineering & Manufacturing' },
+  { value: 'science', label: 'Science & Research' },
+  { value: 'consulting', label: 'Consulting' },
+  { value: 'arts', label: 'Arts & Design' },
+]
+
+/** Industry questions are shown to alumni/grads and to anyone exploring or switching fields. */
+function showIndustry(a: Answers): boolean {
+  const p = persona(a)
+  return p === 'alumni' || p === 'grad' || a.goal === 'explore' || a.goal === 'career_change'
 }
 
 const always = (_: Answers): boolean => true
@@ -34,9 +110,10 @@ export const QUESTIONS: Question[] = [
     id: 'year', type: 'single', isVisible: always,
     prompt: 'Where are you in your Chapman journey?',
     options: [
-      { value: 'early', label: 'First or second year' },
-      { value: 'junior', label: 'Junior' },
-      { value: 'senior', label: 'Senior / graduating' },
+      { value: 'first', label: 'First year' },
+      { value: 'second', label: 'Second year' },
+      { value: 'third', label: 'Third year' },
+      { value: 'fourth', label: 'Fourth year' },
       { value: 'grad', label: 'Graduate student' },
       { value: 'alumni', label: 'Alumni' },
     ],
@@ -64,15 +141,31 @@ export const QUESTIONS: Question[] = [
     id: 'goal', type: 'single', isVisible: always,
     prompt: 'What brings you here today?',
     helpText: 'Pick the one that fits best right now.',
+    options: goalOptions, // persona-adaptive
+  },
+
+  // ---- Industry / career-change branch -------------------------------------
+  {
+    id: 'industry_current', type: 'single', isVisible: showIndustry,
+    prompt: 'Which industry are you in or closest to?',
     options: [
-      { value: 'explore', label: 'Explore my career or major direction' },
-      { value: 'materials', label: 'Build my application materials' },
-      { value: 'interviews', label: 'Prepare for interviews' },
-      { value: 'jobsearch', label: 'Search for jobs or internships' },
-      { value: 'network', label: 'Network and find mentors' },
-      { value: 'gradschool', label: 'Plan for grad school' },
-      { value: 'international', label: 'Work or intern internationally' },
+      ...INDUSTRIES,
+      { value: 'none', label: 'Not in one yet / still exploring' },
     ],
+  },
+  {
+    id: 'industry_switch', type: 'single', isVisible: showIndustry,
+    prompt: 'Are you looking to break into a different industry?',
+    options: [
+      { value: 'yes', label: 'Yes — a different field' },
+      { value: 'no', label: 'No — staying in my field' },
+    ],
+  },
+  {
+    id: 'industry_target', type: 'single',
+    isVisible: (a) => showIndustry(a) && a.industry_switch === 'yes',
+    prompt: 'Which industry are you aiming for?',
+    options: INDUSTRIES,
   },
 
   {
@@ -173,7 +266,7 @@ export const QUESTIONS: Question[] = [
       { value: 'europe', label: 'Europe' },
       { value: 'asia', label: 'Asia' },
       { value: 'americas', label: 'Americas' },
-      { value: 'unsure', label: "Not sure yet" },
+      { value: 'unsure', label: 'Not sure yet' },
     ],
   },
 ]

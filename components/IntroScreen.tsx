@@ -1,6 +1,6 @@
 export default function IntroScreen({ onStart }: { onStart: () => void }) {
   return (
-    <section className="text-center">
+    <section className="flex min-h-[66vh] flex-col items-center justify-center text-center">
       <p className="font-heading text-sm font-bold uppercase tracking-widest text-chapman-red">
         Driven by Curiosity. Inspired by Chapman.
       </p>

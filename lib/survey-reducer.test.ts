@@ -20,13 +20,13 @@ describe('survey reducer', () => {
   it('cannot advance until the current question is answered', () => {
     const s = start()
     expect(canAdvance(s)).toBe(false)
-    const answered = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    const answered = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     expect(canAdvance(answered)).toBe(true)
   })
 
   it('walks the core questions in order', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'next' })
     expect(currentQuestion(s)?.id).toBe('college')
     s = surveyReducer(s, { type: 'answer', id: 'college', value: 'argyros' })
@@ -36,7 +36,7 @@ describe('survey reducer', () => {
 
   it('branches: choosing materials surfaces the materials follow-ups', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'next' })
     s = surveyReducer(s, { type: 'answer', id: 'college', value: 'argyros' })
     s = surveyReducer(s, { type: 'next' })
@@ -47,7 +47,7 @@ describe('survey reducer', () => {
 
   it('reaches results after the last visible question', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'senior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'fourth' })
     s = surveyReducer(s, { type: 'next' })
     s = surveyReducer(s, { type: 'answer', id: 'college', value: 'law' })
     s = surveyReducer(s, { type: 'next' })
@@ -60,7 +60,7 @@ describe('survey reducer', () => {
 
   it('back returns to the previous visible question', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'next' })
     s = surveyReducer(s, { type: 'back' })
     expect(currentQuestion(s)?.id).toBe('year')
@@ -78,7 +78,7 @@ describe('survey reducer', () => {
   it('changing an earlier branch answer drops now-invisible later answers on results', () => {
     // Build a full materials path, then change goal to network and confirm materials answers are gone.
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'answer', id: 'college', value: 'argyros' })
     s = surveyReducer(s, { type: 'answer', id: 'goal', value: 'materials' })
     s = surveyReducer(s, { type: 'answer', id: 'materials_which', value: ['resume'] })
@@ -88,7 +88,7 @@ describe('survey reducer', () => {
 
   it('progress reports current and total visible questions', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'answer', id: 'college', value: 'argyros' })
     s = surveyReducer(s, { type: 'answer', id: 'goal', value: 'network' })
     const p = progress(s)
@@ -98,7 +98,7 @@ describe('survey reducer', () => {
 
   it('restart returns to intro with no answers', () => {
     let s = start()
-    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'junior' })
+    s = surveyReducer(s, { type: 'answer', id: 'year', value: 'third' })
     s = surveyReducer(s, { type: 'restart' })
     expect(s).toEqual(initialState)
   })

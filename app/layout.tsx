@@ -1,9 +1,5 @@
 import type { Metadata } from 'next'
-import { Jost, Source_Serif_4 } from 'next/font/google'
 import './globals.css'
-
-const jost = Jost({ subsets: ['latin'], variable: '--font-jost', display: 'swap' })
-const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif', display: 'swap' })
 
 export const metadata: Metadata = {
   // metadataBase makes the file-based opengraph-image resolve to an absolute URL.
@@ -26,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${jost.variable} ${sourceSerif.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   )

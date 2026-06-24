@@ -1,6 +1,7 @@
 'use client'
 import { useReducer, useMemo } from 'react'
 import { surveyReducer, initialState, currentQuestion, canAdvance, progress } from '@/lib/survey-reducer'
+import { optionsFor } from '@/data/questions'
 import { recommend } from '@/lib/recommendation-engine'
 import BrandHeader from '@/components/BrandHeader'
 import IntroScreen from '@/components/IntroScreen'
@@ -32,6 +33,7 @@ export default function Home() {
             <ProgressBar current={current} total={total} />
             <QuestionCard
               question={question}
+              options={optionsFor(question, state.answers)}
               value={state.answers[question.id]}
               onChange={(value) => dispatch({ type: 'answer', id: question.id, value })}
             />

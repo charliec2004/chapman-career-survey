@@ -1,13 +1,15 @@
 'use client'
-import type { Question, AnswerValue } from '@/data/questions'
+import type { Question, Option, AnswerValue } from '@/data/questions'
 
 interface Props {
   question: Question
+  /** Resolved options (the goal question's options are persona-adaptive). */
+  options: Option[]
   value: AnswerValue | undefined
   onChange: (value: AnswerValue) => void
 }
 
-export default function QuestionCard({ question, value, onChange }: Props) {
+export default function QuestionCard({ question, options, value, onChange }: Props) {
   const selected = Array.isArray(value) ? value : value != null ? [value] : []
 
   const toggleMulti = (optValue: string) => {
@@ -23,7 +25,7 @@ export default function QuestionCard({ question, value, onChange }: Props) {
       {question.helpText && <p className="mt-1 text-sm text-pillar">{question.helpText}</p>}
 
       <div className="mt-5 space-y-3">
-        {question.options.map((opt) => {
+        {options.map((opt) => {
           const isSelected = selected.includes(opt.value)
           const inputType = question.type === 'multi' ? 'checkbox' : 'radio'
           return (

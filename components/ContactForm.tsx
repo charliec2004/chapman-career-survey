@@ -69,8 +69,8 @@ export default function ContactForm() {
           <textarea id="cf-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} rows={3}
             className="mt-1 w-full rounded-lg border-2 border-pillar/30 px-3 py-2 focus:border-chapman-red focus:outline-none" />
         </div>
-        <label className="flex items-start gap-2 text-sm">
-          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-1 h-5 w-5 accent-chapman-red" />
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="h-5 w-5 shrink-0 accent-chapman-red" />
           <span>I agree to be contacted by Career &amp; Professional Development.</span>
         </label>
         <button type="submit" disabled={!canSubmit}

@@ -1,5 +1,5 @@
 import {
-  visibleQuestions, type Answers, type AnswerValue, type QuestionId, type Question,
+  visibleQuestions, optionsFor, type Answers, type AnswerValue, type QuestionId, type Question,
 } from '@/data/questions'
 
 export type Phase = 'intro' | 'survey' | 'results'
@@ -20,14 +20,34 @@ export type SurveyAction =
 
 export const initialState: SurveyState = { phase: 'intro', answers: {}, index: 0 }
 
-/** Remove answers for questions that are no longer visible (e.g., after a branch change). */
+/**
+ * Drop answers that are no longer valid after a change:
+ *  - questions that became invisible (branch changed), and
+ *  - values no longer offered (e.g. a persona-specific goal after the year changes,
+ *    so options are persona-adaptive).
+ * Iterates to a fixed point so dropping one answer (e.g. an invalid goal) also
+ * removes the follow-ups that depended on it.
+ */
 function pruneAnswers(answers: Answers): Answers {
-  const visibleIds = new Set(visibleQuestions(answers).map((q) => q.id))
-  const next: Answers = {}
-  for (const [id, value] of Object.entries(answers)) {
-    if (visibleIds.has(id as QuestionId)) next[id as QuestionId] = value
+  let current: Answers = answers
+  for (let pass = 0; pass < 6; pass++) {
+    const visible = visibleQuestions(current)
+    const next: Answers = {}
+    for (const q of visible) {
+      const value = current[q.id]
+      if (value == null) continue
+      const valid = new Set(optionsFor(q, current).map((o) => o.value))
+      if (Array.isArray(value)) {
+        const kept = value.filter((v) => valid.has(v))
+        if (kept.length > 0) next[q.id] = kept
+      } else if (valid.has(value)) {
+        next[q.id] = value
+      }
+    }
+    if (Object.keys(next).length === Object.keys(current).length) return next
+    current = next
   }
-  return next
+  return current
 }
 
 function isAnswered(value: AnswerValue | undefined): boolean {

@@ -1,11 +1,24 @@
 import type { ScoreTargetId } from '@/data/resources'
-import type { QuestionId } from '@/data/questions'
+import { INDUSTRIES, type QuestionId } from '@/data/questions'
 
 export interface Contribution {
   resourceId: ScoreTargetId
   weight: number
   reason: string
 }
+
+// Each target industry → connect with Chapman alumni in it + research it.
+// Generated from the industry list so each reason names the specific field
+// (still fixed strings built at module load → fully deterministic).
+const INDUSTRY_TARGET_SCORING: Record<string, Contribution[]> = Object.fromEntries(
+  INDUSTRIES.map((ind) => [
+    ind.value,
+    [
+      { resourceId: 'panther-network', weight: 2, reason: `Connect with Chapman alumni working in ${ind.label}` },
+      { resourceId: 'vault', weight: 1, reason: `Research ${ind.label} employers and trends on Vault` },
+    ],
+  ]),
+)
 
 /**
  * For each question, maps an answer option value to the resources it points to,
@@ -26,7 +39,20 @@ export const SCORING: Partial<Record<QuestionId, Record<string, Contribution[]>>
       { resourceId: 'panther-network', weight: 1, reason: 'Alumni who attended grad school can offer guidance' },
     ],
     international: [{ resourceId: 'goinglobal', weight: 1, reason: 'You want to work or intern internationally' }],
+    career_change: [
+      { resourceId: 'panther-network', weight: 1, reason: 'You want to change careers or industries' },
+      { resourceId: 'vault', weight: 1, reason: 'Vault helps you research a new industry' },
+    ],
   },
+
+  // Industry / career-change branch (alumni, grads, explorers, career-changers).
+  industry_switch: {
+    yes: [
+      { resourceId: 'panther-network', weight: 2, reason: 'Chapman alumni can help you break into a new field' },
+      { resourceId: 'careershift', weight: 1, reason: 'CareerShift surfaces contacts in your target field' },
+    ],
+  },
+  industry_target: INDUSTRY_TARGET_SCORING,
 
   explore_assessment: {
     no: [{ resourceId: 'assessments', weight: 2, reason: "You haven't taken a career assessment yet" }],
