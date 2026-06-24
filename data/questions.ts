@@ -26,8 +26,8 @@ export interface Question {
   isVisible: (answers: Answers) => boolean
 }
 
-const always = () => true
-const whenGoal = (g: GoalValue) => (a: Answers) => a.goal === g
+const always = (_: Answers): boolean => true
+const whenGoal = (g: GoalValue) => (a: Answers): boolean => typeof a.goal === 'string' && a.goal === g
 
 export const QUESTIONS: Question[] = [
   {
