@@ -1,0 +1,6 @@
+<!-- Favicon: Chapman-INSPIRED. A red tile with a white triangle echoing the site's
+     own geometric accent. NOT the official Chapman logo, window icon, or seal. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" role="img" aria-label="Chapman Career Services">
+  <rect width="32" height="32" rx="7" fill="#A50034"/>
+  <path d="M16 8.5 L24 22 H8 Z" fill="#FFFFFF"/>
+</svg>
