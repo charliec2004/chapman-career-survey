@@ -7,8 +7,9 @@ const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-sourc
 
 export const metadata: Metadata = {
   // metadataBase makes the file-based opengraph-image resolve to an absolute URL.
-  // Update this to the real deployed origin before launch.
-  metadataBase: new URL('https://career-survey.chapman.edu'),
+  // Set to the GitHub Pages origin; basePath adds the /<repo> subpath to the image URL.
+  // Update this to the real production origin if the site moves to a custom domain.
+  metadataBase: new URL('https://charliec2004.github.io'),
   title: 'Chapman Career Services Finder',
   description: 'Answer a few questions and discover the Chapman career resources that fit you best.',
   openGraph: {
