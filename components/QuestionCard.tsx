@@ -31,7 +31,7 @@ export default function QuestionCard({ question, value, onChange }: Props) {
               key={opt.value}
               className={[
                 'flex cursor-pointer items-center gap-3 rounded-lg border-2 px-4 py-3 transition-colors',
-                'min-h-11 focus-within:ring-2 focus-within:ring-chapman-red',
+                'min-h-11 focus-within:ring-2 focus-within:ring-chapman-red focus-within:ring-offset-2',
                 isSelected ? 'border-chapman-red bg-chapman-red/5' : 'border-pillar/30 hover:border-chapman-red/60',
               ].join(' ')}
             >

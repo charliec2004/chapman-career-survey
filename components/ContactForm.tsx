@@ -74,7 +74,7 @@ export default function ContactForm() {
           <span>I agree to be contacted by Career &amp; Professional Development.</span>
         </label>
         <button type="submit" disabled={!canSubmit}
-          className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-6 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-4 focus-visible:ring-chapman-red/40">
+          className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-6 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2">
           Notify me
         </button>
       </form>

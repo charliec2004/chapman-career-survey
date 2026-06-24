@@ -20,8 +20,11 @@ export default function Home() {
 
   return (
     <div className="min-h-dvh bg-white">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-chapman-red focus:px-3 focus:py-2 focus:text-white">
+        Skip to content
+      </a>
       <BrandHeader />
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main id="main" className="mx-auto max-w-3xl px-4 py-10">
         {state.phase === 'intro' && <IntroScreen onStart={() => dispatch({ type: 'start' })} />}
 
         {state.phase === 'survey' && question && (
@@ -34,15 +37,17 @@ export default function Home() {
             />
             <div className="mt-8 flex items-center justify-between">
               <button
+                type="button"
                 onClick={() => dispatch({ type: 'back' })}
-                className="min-h-11 font-heading font-bold text-pillar hover:text-panther-black focus:outline-none focus-visible:underline"
+                className="min-h-11 font-heading font-bold text-pillar hover:text-panther-black focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2 rounded"
               >
                 ← Back
               </button>
               <button
+                type="button"
                 onClick={() => dispatch({ type: 'next' })}
                 disabled={!canAdvance(state)}
-                className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-4 focus-visible:ring-chapman-red/40"
+                className="inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-2 font-heading font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
               >
                 {current >= total ? 'See results' : 'Next'}
               </button>

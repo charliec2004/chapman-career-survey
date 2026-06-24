@@ -12,8 +12,9 @@ export default function IntroScreen({ onStart }: { onStart: () => void }) {
         services that fit you best — tools to use and the right office to talk to.
       </p>
       <button
+        type="button"
         onClick={onStart}
-        className="mt-8 inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-3 font-heading text-lg font-bold text-white transition-transform hover:scale-[1.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-chapman-red/40"
+        className="mt-8 inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-8 py-3 font-heading text-lg font-bold text-white transition-transform hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
       >
         Start the survey
       </button>

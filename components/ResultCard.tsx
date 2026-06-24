@@ -33,7 +33,7 @@ export default function ResultCard({ rec, featured = false }: { rec: Recommendat
       {a.href && (
         <a
           href={a.href} target="_blank" rel="noopener noreferrer"
-          className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-5 py-2 font-heading text-sm font-bold text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-chapman-red/40"
+          className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-chapman-red px-5 py-2 font-heading text-sm font-bold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
         >
           {a.label ?? 'Open'}
         </a>

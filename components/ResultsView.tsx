@@ -29,8 +29,9 @@ export default function ResultsView({ results, onRestart }: { results: Results; 
       )}
 
       <button
+        type="button"
         onClick={onRestart}
-        className="mt-8 inline-flex min-h-11 items-center rounded-lg border-2 border-chapman-red px-6 py-2 font-heading font-bold text-chapman-red focus:outline-none focus-visible:ring-4 focus-visible:ring-chapman-red/40"
+        className="mt-8 inline-flex min-h-11 items-center rounded-lg border-2 border-chapman-red px-6 py-2 font-heading font-bold text-chapman-red focus:outline-none focus-visible:ring-2 focus-visible:ring-chapman-red focus-visible:ring-offset-2"
       >
         Start over
       </button>

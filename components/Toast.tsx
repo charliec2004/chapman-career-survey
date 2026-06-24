@@ -14,7 +14,7 @@ export default function Toast({ message, onDismiss }: { message: string; onDismi
     >
       <div className="flex items-start justify-between gap-3">
         <p>{message}</p>
-        <button onClick={onDismiss} aria-label="Dismiss notification" className="font-heading text-white/80 hover:text-white">✕</button>
+        <button type="button" onClick={onDismiss} aria-label="Dismiss notification" className="rounded font-heading text-white/80 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-1 focus-visible:ring-offset-panther-black">✕</button>
       </div>
     </div>
   )
