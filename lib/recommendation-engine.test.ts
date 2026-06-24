@@ -51,8 +51,10 @@ describe('recommendation engine', () => {
     expect(recommend({ ...base, year: 'junior' }).seniorPassportNudge).toBe(false)
   })
 
-  it('is deterministic — same answers, same output', () => {
-    const answers: Answers = { year: 'grad', college: 'schmid', goal: 'network', network_focus: 'alumni' }
-    expect(recommend(answers)).toEqual(recommend(answers))
+  it('is deterministic — same answers in different insertion order produce identical output', () => {
+    // Build two objects with the same key-value pairs but different property-insertion order.
+    const a: Answers = { year: 'junior', college: 'argyros', goal: 'jobsearch', jobsearch_need: 'contacts', jobsearch_region: 'local' }
+    const b: Answers = { jobsearch_region: 'local', goal: 'jobsearch', college: 'argyros', jobsearch_need: 'contacts', year: 'junior' }
+    expect(recommend(a)).toEqual(recommend(b))
   })
 })

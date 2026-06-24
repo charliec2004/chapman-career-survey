@@ -14,17 +14,18 @@ export interface Contribution {
  * Reasons are fixed strings — no generated text — so results stay deterministic.
  */
 export const SCORING: Partial<Record<QuestionId, Record<string, Contribution[]>>> = {
+  // 'goal' is a weak signal (weight 1): it sets the student's mode, but their specific follow-up answers (weight 2-3) should drive the primary recommendation.
   goal: {
-    explore: [{ resourceId: 'assessments', weight: 3, reason: 'You want to explore your career or major direction' }],
-    materials: [{ resourceId: 'vmock', weight: 3, reason: 'You want to build your application materials' }],
-    interviews: [{ resourceId: 'vmock', weight: 3, reason: "You're preparing for interviews" }],
-    jobsearch: [{ resourceId: 'handshake', weight: 3, reason: "You're searching for jobs or internships" }],
-    network: [{ resourceId: 'panther-network', weight: 3, reason: 'You want to network and find mentors' }],
+    explore: [{ resourceId: 'assessments', weight: 1, reason: 'You want to explore your career or major direction' }],
+    materials: [{ resourceId: 'vmock', weight: 1, reason: 'You want to build your application materials' }],
+    interviews: [{ resourceId: 'vmock', weight: 1, reason: "You're preparing for interviews" }],
+    jobsearch: [{ resourceId: 'handshake', weight: 1, reason: "You're searching for jobs or internships" }],
+    network: [{ resourceId: 'panther-network', weight: 1, reason: 'You want to network and find mentors' }],
     gradschool: [
-      { resourceId: 'office-selected', weight: 3, reason: "You're planning for grad school" },
+      { resourceId: 'office-selected', weight: 1, reason: "You're planning for grad school" },
       { resourceId: 'panther-network', weight: 1, reason: 'Alumni who attended grad school can offer guidance' },
     ],
-    international: [{ resourceId: 'goinglobal', weight: 3, reason: 'You want to work or intern internationally' }],
+    international: [{ resourceId: 'goinglobal', weight: 1, reason: 'You want to work or intern internationally' }],
   },
 
   explore_assessment: {
@@ -63,7 +64,7 @@ export const SCORING: Partial<Record<QuestionId, Record<string, Contribution[]>>
 
   jobsearch_need: {
     listings: [{ resourceId: 'handshake', weight: 3, reason: 'You need to find job and internship listings' }],
-    research: [{ resourceId: 'vault', weight: 5, reason: 'You want to research employers and industries' }],
+    research: [{ resourceId: 'vault', weight: 3, reason: 'You want to research employers and industries' }],
     contacts: [
       { resourceId: 'careershift', weight: 3, reason: 'You want to find contacts and the hidden job market' },
       { resourceId: 'panther-network', weight: 1, reason: 'Alumni are a great source of contacts' },

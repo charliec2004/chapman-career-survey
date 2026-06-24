@@ -1,3 +1,4 @@
+import { QUESTIONS } from '@/data/questions'
 import type { Answers } from '@/data/questions'
 import {
   RESOURCES, COLLEGE_TO_OFFICE, getResource,
@@ -49,9 +50,11 @@ export function recommend(answers: Answers): Results {
   // Office is always present, with its base reason, before scoring.
   addReason(acc, officeId, 0, officeBaseReason(officeId))
 
-  // Accumulate contributions from every answered question.
-  for (const [questionId, answer] of Object.entries(answers)) {
-    const optionMap = SCORING[questionId as keyof typeof SCORING]
+  // Accumulate contributions from every answered question in canonical QUESTIONS order
+  // to guarantee deterministic reason ordering regardless of answer-object key order.
+  for (const q of QUESTIONS) {
+    const answer = answers[q.id]
+    const optionMap = SCORING[q.id]
     if (!optionMap || answer == null) continue
     const values = Array.isArray(answer) ? answer : [answer]
     for (const value of values) {
