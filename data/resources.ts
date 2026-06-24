@@ -123,7 +123,8 @@ export const RESOURCES: Record<ResourceId, Resource> = {
   },
   'office-communication': {
     id: 'office-communication', kind: 'office', name: 'School of Communication Career Advising', priority: 0,
-    whatItIs: 'Career advising for School of Communication students.',
+    // Two advisors serve this school; primary contact below, secondary noted here (per reference doc).
+    whatItIs: 'Career advising for School of Communication students. Advisors: Dr. Andrea Weber (aweber@chapman.edu, (714) 516-5182) and Matt Prince (maprince@chapman.edu, (714) 496-9302).',
     action: { email: 'aweber@chapman.edu', phone: '(714) 516-5182', location: 'Doti Hall 203 & 206', scheduling: 'Handshake' },
   },
   'office-law': {
